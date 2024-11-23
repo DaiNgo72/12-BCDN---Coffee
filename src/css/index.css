@@ -250,3 +250,38 @@ body {
     /* 16px  */
     font-size: 1.6rem;
 }
+
+
+
+header {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background-color: chocolate;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card {
+    padding: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.list-card {
+    display: flex;
+    gap: 1.5rem;
+
+    margin-top: 1rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+
+    flex-wrap: wrap;
+}
