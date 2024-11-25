@@ -1,25 +1,27 @@
-import { createElement } from './index.js'
+import { el } from './index.js'
 
 export const Header = () => {
-    return createElement(
+    return el(
         'header',
         {},
-        createElement('div', { className: 'container' },
+        el('div', { className: 'container' },
 
-            createElement('div', { className: 'header__wrapper' },
+            el('div', { className: 'header__wrapper' },
 
-                createElement('div', {},
-                    createElement('i', { className: "fa-solid fa-mug-saucer" })
+                el('a', {
+                    href: '/'
+                },
+                    el('i', { className: "fa-solid fa-mug-saucer" })
                 ),
 
-                createElement('h1', {}, "Coffee Masters"),
+                el('h1', {}, "Coffee Masters"),
 
-                createElement(
+                el(
                     'a',
                     {
                         href: "src/pages/order.html"
                     },
-                    createElement('i', { className: 'fa-solid fa-cart-shopping' })
+                    el('i', { className: 'fa-solid fa-cart-shopping' })
                 ),
 
             )

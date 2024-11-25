@@ -1,14 +1,23 @@
 /**
  * factory
  */
-export function createElement(tag, props, ...children) {
+export function el(tag, props, ...children) {
     const el = document.createElement(tag);
 
     // for in: duyệt qua từng key của object
     for (const key in props) {
         const value = props[key];
 
-        el[key] = value;
+        // Thêm vào thuộc tính được cho thẻ
+        // Nhưng có thể sẽ không hiển thị được lên trên trình duyệt
+
+        // Nếu như thuộc tính của mình là thuộc tính mặc định của trình duyệt
+        if(key in el) {
+            el[key] = value;
+        } else {
+            // Những thuộc tính không phải mặc định của trình duyệt, nhưng muốn hiển thị lên trên cây DOM của trình duyệt.
+            el.setAttribute(key, value);
+        }
     }
 
     // if (children && Array.isArray(children)) {
@@ -42,3 +51,5 @@ export function sum(...rest) {
 // console.log(sum(1, 2, 3, 4, 6, 7))
 
 const PI = 3.14
+
+export const CART_KEY = "cart-key"
