@@ -32,3 +32,6 @@ const listCart = [
 # Truthy, falsy
 - Truthy: còn lại.
 - Falsy: null, undefined, false, 0, ""
+
+# Promise
+# Address, Tham chiếu

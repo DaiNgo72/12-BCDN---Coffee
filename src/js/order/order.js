@@ -1,40 +1,33 @@
 import { Header } from '../header.js'
 import { el, CART_KEY } from '../index.js'
-import { getLocal } from '../utils.js'
+import { getLocal, saveToLocal } from '../utils.js'
+
 
 const root = document.getElementById('root')
+const cartLocal = getLocal(CART_KEY);
 
 root.append(
     Header(),
     ListCart(),
 )
 
-function ListCart() {
 
-    const tbody = el('tbody', {});
 
+let listCartValue = []
+
+function getCartAPI() {
     fetch("https://673b3ae4339a4ce4451b3e27.mockapi.io/product")
         .then(r => r.json())
+        // 1. Lấy sản phẩm mà người dùng đã thêm vào giỏ hàng
         .then(r => {
-            console.log(r);
-            const value = getLocal(CART_KEY);
-            // Cách 1:
-            // const arrListCart = [];
-            // r.forEach(item => {
-            //     // Nếu như item.id có nằm trong mảng của cart
-            //     // Thêm vào arrListCart
-            //     if (value.includes(item.id)) {
-            //         arrListCart.push(item);
-            //     }
-            // })
-
             // Cách 2: filter
+            // 1. Lấy sản phẩm mà người dùng đã thêm vào giỏ hàng
             const arrListCart2 = r.filter(item => {
                 // true thì item sẽ được thêm vào mảng arrListCart2
                 // false thì sẽ bỏ qua, không thêm vào mảng
 
                 // exist: object | undefined
-                const exist = value.find((cart) => {
+                const exist = cartLocal.find((cart) => {
                     return cart.id === item.id
                 })
 
@@ -44,30 +37,33 @@ function ListCart() {
                 } else {
                     return false;
                 }
-
             })
 
+
+            // Lưu lại để có tăng giảm số lượng của một sản phẩm thì không cần gọi api
+            listCartValue = arrListCart2;
+
+            return arrListCart2;
+        })
+        // 2. Lặp qua từng sản phẩm và bổ sung property số lượng vào cho từng sản phẩm đó.
+        .then(arrListCart2 => {
             arrListCart2.forEach(cart => {
-                // Tìm vị trí index của sản phẩm trong giỏ hàng tương ứng với sản phẩm của call api
-                const idx = value.findIndex(c => {
+                const idx = cartLocal.findIndex(c => {
                     return c.id === cart.id;
                 })
-
-                // thêm thuộc tính quantity cho sản phẩn của call api
-                // với quantity từ giỏ hàng
-                cart.quantity = value[idx].quantity
+                cart.quantity = cartLocal[idx].quantity
             })
 
-            // const arrListCart3 = filter(r, item => {
-            //     // true thì item sẽ được thêm vào mảng arrListCart2
-            //     // false thì sẽ bỏ qua, không thêm vào mảng
-            //     return value.includes(item.id);
-            // })
+            return arrListCart2
+        })
+        // 3. Tính total + Render ra Tr
+        .then(arrListCart2 => {
+            const tbody = document.getElementById('tbody');
+            tbody.textContent = '';
 
-            console.log(arrListCart2);
-
+            // 3.
             let total = 0;
-
+            // 3. Tính total + Render ra Tr
             arrListCart2.forEach(item => {
 
                 tbody.append(
@@ -79,14 +75,52 @@ function ListCart() {
             })
 
             // -----------
+            // 4. Render thẻ TrTotal
             tbody.append(
                 TrTotal(total)
             )
-
         })
         .catch(err => {
             console.log(err);
         })
+}
+
+getCartAPI();
+
+function render() {
+    // 1. Bổ sung quantity cho từng phần tử của mảng cần render
+    listCartValue.forEach(cart => {
+        const idx = cartLocal.findIndex(c => {
+            return c.id === cart.id;
+        })
+
+        cart.quantity = cartLocal[idx].quantity
+    })
+
+    // 2. Render UI
+    const tbody = document.getElementById('tbody');
+    tbody.textContent = '';
+
+    let total = 0;
+    // Lặp qua từng phần tử của mảng và show lên giao diện.
+    listCartValue.forEach(item => {
+        tbody.append(
+            Tr(item)
+        )
+
+        total += item.price * item.quantity;
+    })
+
+    tbody.append(
+        TrTotal(total)
+    )
+}
+
+function ListCart() {
+    // Nếu local không có giỏ hàng thì return Null
+    if (!cartLocal) {
+        return el('p', {}, "Empty");
+    }
 
     return el('table', {},
         el('thead', {},
@@ -98,8 +132,7 @@ function ListCart() {
             )
         ),
 
-        tbody
-
+        el('tbody', { id: 'tbody' }, "loading...")
     )
 }
 
@@ -109,7 +142,20 @@ function Tr(props) {
         el('td', {},
             el('button', {
                 onclick: () => {
-                    console.log('+')
+                    console.log('+');
+
+                    const idx = cartLocal.findIndex(
+                        item => {
+                            return item.id === props.id
+                        }
+                    )
+
+                    cartLocal[idx].quantity += 1;
+
+                    saveToLocal(CART_KEY, cartLocal);
+
+                    // Render lại giao diện
+                    render();
                 }
             }, "+"),
 
@@ -118,6 +164,23 @@ function Tr(props) {
             el('button', {
                 onclick: () => {
                     console.log('-')
+
+                    const idx = cartLocal.findIndex(
+                        item => {
+                            return item.id === props.id
+                        }
+                    )
+
+                    if(cartLocal[idx].quantity === 1) {
+                        return;
+                    }
+                    
+                    cartLocal[idx].quantity -= 1;
+
+                    saveToLocal(CART_KEY, cartLocal);
+
+                    // Render lại giao diện
+                    render();
                 }
             }, "-")
         ),
@@ -135,15 +198,5 @@ function TrTotal(total) {
     )
 }
 
-// function filter(arr, cb) {
-//     const arrListCart = [];
 
-//     arr.forEach(item => {
-//         console.log(arr,item)
-//         if (cb(item)) {
-//             arrListCart.push(item);
-//         }
-//     })
 
-//     return arrListCart;
-// }
