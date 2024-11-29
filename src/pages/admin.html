@@ -12,7 +12,45 @@
   <body>
     <h1>Admin Coffee</h1>
 
+    <div>
+      <input id="inp-name" placeholder="name" />
+      <input id="inp-desc" placeholder="description" />
+      <br />
 
-    
+      <input id="inp-price" placeholder="price" type="number" />
+      <input id="inp-img" placeholder="image" />
+
+      <br />
+      <button id="btn-add">Add</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Image</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>name 1</td>
+          <td>desc 1</td>
+          <td>44$</td>
+          <td>
+            <img width="100" height="100" src="https://picsum.photos/200" />
+          </td>
+          <td>
+            <button>Edit</button>
+            <button>Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <script type="module" src="../js/admin/index.js"></script>
   </body>
 </html>

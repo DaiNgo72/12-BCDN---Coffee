@@ -12,7 +12,7 @@ export function el(tag, props, ...children) {
         // Nhưng có thể sẽ không hiển thị được lên trên trình duyệt
 
         // Nếu như thuộc tính của mình là thuộc tính mặc định của trình duyệt
-        if(key in el) {
+        if (key in el) {
             el[key] = value;
         } else {
             // Những thuộc tính không phải mặc định của trình duyệt, nhưng muốn hiển thị lên trên cây DOM của trình duyệt.
@@ -53,3 +53,5 @@ export function sum(...rest) {
 const PI = 3.14
 
 export const CART_KEY = "cart-key"
+
+export const BASE_URL = 'https://673b3ae4339a4ce4451b3e27.mockapi.io'

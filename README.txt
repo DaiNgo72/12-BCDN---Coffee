@@ -34,4 +34,4 @@ const listCart = [
 - Falsy: null, undefined, false, 0, ""
 
 # Promise
-# Address, Tham chiếu
+# Array, Object: Address, Tham chiếu
