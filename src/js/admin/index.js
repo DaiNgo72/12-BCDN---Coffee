@@ -125,9 +125,14 @@ document.getElementById('btn-add').onclick = () => {
         const desc = document.getElementById('inp-desc').value;
         const price = document.getElementById('inp-price').value;
         const img = document.getElementById('inp-img').value;
-        // 
 
-        console.log(name, desc, price, img);
+        // Nếu như validate không thành công
+        // Dừng tại đây
+        const isValid = validateForm(name, desc, price, img);
+        // if (isValid === false) {
+        if (!isValid) {
+            return;
+        }
 
         const newProduct = {
             name: name,
@@ -159,8 +164,6 @@ document.getElementById('btn-add').onclick = () => {
             // handle error
         })
     }
-
-
 }
 
 function resetForm() {
@@ -168,4 +171,58 @@ function resetForm() {
     document.getElementById('inp-desc').value = ''
     document.getElementById('inp-price').value = ''
     document.getElementById('inp-img').value = ''
+}
+
+
+const REGEX_NUMBER = /^[0-9]+$/;
+const REGEX_URL = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+// true: nếu như không có lỗi gì
+// false: nếu như không đúng mong muốn
+function validateForm(name, desc, price, img) {
+    console.log(name, desc, price, img);
+    let isValid = true;
+
+    if (name.trim().length === 0) {
+        document.getElementById('inp-name-err').textContent = "Không được để trống"
+        isValid = false
+    } else {
+        document.getElementById('inp-name-err').textContent = ""
+    }
+
+    if (desc.trim().length === 0) {
+        document.getElementById('inp-desc-err').textContent = "Không được để trống"
+        isValid = false;
+    } else {
+        document.getElementById('inp-desc-err').textContent = ""
+    }
+
+    // Nếu như có nhập chữ thì sẽ return false
+    if (!REGEX_NUMBER.test(price) && Number(price) <= 0) {
+        if (price.length <= 0 ) {
+            document.getElementById('inp-price-err').textContent = "Không được để trống"
+        }
+
+        // Nếu như có nhập chữ
+        if (price.length > 0 && !REGEX_NUMBER.test(price)) {
+            document.getElementById('inp-price-err').textContent = "Không được nhập chữ"
+        }
+
+        // Đã nhập số đúng rồi, nhưng giá trị nhỏ hơn 0
+        if (price.length > 0 && REGEX_NUMBER.test(price) && Number(price) <= 0) {
+            document.getElementById('inp-price-err').textContent = "Không nhập giá trị nhỏ hơn 0"
+        }
+
+        isValid = false;
+    } else {
+        document.getElementById('inp-price-err').textContent = ""
+    }
+
+    if (!REGEX_URL.test(img)) {
+        document.getElementById('inp-img-err').textContent = "Phải cung cấp url của ảnh"
+        isValid = false;
+    } else {
+        document.getElementById('inp-img-err').textContent = ""
+    }
+
+    return isValid
 }

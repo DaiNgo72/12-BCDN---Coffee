@@ -35,3 +35,10 @@ const listCart = [
 
 # Promise
 # Array, Object: Address, Tham chiếu
+
+
+# Validation
+- name: bắt buộc nhập vào
+- desc: bắt buộc nhập vào
+- price: chỉ được nhập số, lớn hơn 0, /^[0-9]+$/
+- img: bắt buộc phải là được dẫn url, /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/

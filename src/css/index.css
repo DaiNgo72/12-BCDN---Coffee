@@ -312,3 +312,7 @@ table th {
     background-color: black;
     color: white;
 }
+
+input + span {
+    color: red;
+}

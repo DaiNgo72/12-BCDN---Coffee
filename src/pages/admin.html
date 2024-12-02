@@ -11,14 +11,25 @@
   </head>
   <body>
     <h1>Admin Coffee</h1>
+    <!-- 
+    - Không màu có màu đỏ
+    - Vì trước nó không có thẻ input
+    -->
+    <span>hahaha</span>
 
     <div>
       <input id="inp-name" placeholder="name" />
+      <span id="inp-name-err">Không được để trống</span>
+
       <input id="inp-desc" placeholder="description" />
+      <span id="inp-desc-err"></span>
       <br />
 
       <input id="inp-price" placeholder="price" type="number" />
+      <span id="inp-price-err"></span>
+
       <input id="inp-img" placeholder="image" />
+      <span id="inp-img-err"></span>
 
       <br />
       <button id="btn-add">Add</button>
